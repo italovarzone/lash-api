@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const PORT = 3000;
-require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const uri = process.env.MONGODB_URI;
@@ -15,18 +14,30 @@ const client = new MongoClient(uri, {
   },
 });
 
+if (uri) {
+    console.log(`Conectado ao banco de dados, connection string: ${uri}`);
+} else {
+    console.log('Não foi possível conectar ao banco de dados!');
+}
+
 let db; // Variável para armazenar a referência do banco de dados
 
 // Função para conectar ao MongoDB
-async function connectDB() {
-  try {
-    await client.connect();
-    console.log('Conectado ao MongoDB Atlas');
-    db = client.db('lashdb'); // Conecte-se ao banco de dados específico
-  } catch (err) {
-    console.error('Erro ao conectar ao MongoDB:', err);
+async function connectDB(retries = 5) {
+    while (retries) {
+      try {
+        await client.connect();
+        console.log('Conectado ao MongoDB Atlas');
+        db = client.db('lashdb'); // Conecte-se ao banco de dados específico
+        break;
+      } catch (err) {
+        console.error('Erro ao conectar ao MongoDB:', err);
+        retries -= 1;
+        console.log(`Tentando reconectar... ${retries} tentativas restantes`);
+        await new Promise(res => setTimeout(res, 5000)); // Aguardar 5 segundos
+      }
+    }
   }
-}
 
 // Função middleware para garantir que o banco de dados esteja conectado
 function ensureDbConnection(req, res, next) {
