@@ -1,10 +1,9 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const PORT = 3000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
-const uri = process.env.MONGODB_URI;
+const uri = 'mongodb+srv://lashappapi:admin@lashdb.ozmmg.mongodb.net/?retryWrites=true&w=majority&appName=lashdb';
 
 const client = new MongoClient(uri, {
   serverApi: {
