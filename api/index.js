@@ -6,12 +6,13 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = 'mongodb+srv://lashappapi:admin@lashdb.ozmmg.mongodb.net/?retryWrites=true&w=majority&appName=lashdb';
 
 const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
+    directConnection: true,
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    },
+  });
 
 let db; // Variável para armazenar a referência do banco de dados
 
