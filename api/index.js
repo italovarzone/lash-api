@@ -352,6 +352,4 @@ app.get('/api/dashboard', ensureDbConnection, async (req, res) => {
     }
   });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando...`);
-});
+module.exports = app;
